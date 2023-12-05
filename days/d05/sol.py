@@ -3,7 +3,8 @@ from collections import defaultdict
 print("Day 05:")
 FILE = "days/d05/main.txt"
 
-seeds:dict[int, int] = {} # part 1
+# seeds:dict[int, int] = {} # part 1
+seeds:list[int] = [] # part 1
 seed_ranges:list[tuple[int, int]] = [] # part 2
 
 # dict<(element 1, element 2): list[(dest, source, len)]>
@@ -14,7 +15,7 @@ with open(FILE) as f:
     for i, line in enumerate(f.read().splitlines()):
         if i == 0:
             nums_list = line.lstrip("seeds: ").split(" ")
-            seeds = {int(n):int(n) for n in nums_list}
+            seeds = [int(n) for n in nums_list]
             for i in range(len(nums_list)//2):
                 seed_ranges.append( (int(nums_list[i*2]), int(nums_list[i*2+1])) )
             continue
@@ -28,10 +29,10 @@ with open(FILE) as f:
 
 for i in range(ele_index+1):
     # part 1
-    for seed, loc in seeds.items():
+    for j, loc in enumerate(seeds):
         for destg, sourceg, leng in element_map[(i, i+1)]:
             if sourceg <= loc < sourceg+leng:
-                seeds[seed] = destg - sourceg + loc
+                seeds[j] = destg - sourceg + loc
                 break
     # part 2
     checked = set()
@@ -61,7 +62,7 @@ for i in range(ele_index+1):
         if len(checked) == len(seed_ranges): break
     # print("\n\n")
 
-min_location1 = min(seeds.values())
+min_location1 = min(seeds)
 min_location2 = min(seed_ranges, key=lambda v:v[0])
 
 # print(seed_ranges)
