@@ -1,1 +1,1 @@
-import days.d04.sol
+import days.d06.sol
