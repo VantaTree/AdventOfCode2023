@@ -17,20 +17,27 @@ def insertion_sort(arr, arr2):
 
 def cmp_card(card1, card2) -> bool:
     
-    c1, c2 = Counter(card1), Counter(card2)
-    
-    j1 = c1.get("J", 0)
-    j2 = c2.get("J", 0)
-    
-    if j1 != 0 and j1 < 5:
-        del c1["J"]
-        c1[max(c1, key=lambda k:c1[k])] += j1
-    if j2 != 0 and j2 < 5:
-        del c2["J"]
-        c2[max(c2, key=lambda k:c2[k])] += j2
-        
-    c1 = sum([v*v for v in c1.values()])
-    c2 = sum([v*v for v in c2.values()])
+    if card1 in card_type_scores:
+        c1 = card_type_scores[card1]
+    else:
+        c1 = Counter(card1)
+        j1 = c1.get("J", 0)
+        if j1 != 0 and j1 < 5:
+            del c1["J"]
+            c1[max(c1, key=lambda k:c1[k])] += j1
+        c1 = sum([v*v for v in c1.values()])
+        card_type_scores[card1] = c1
+
+    if card2 in card_type_scores:
+        c2 = card_type_scores[card2]
+    else:
+        c2 = Counter(card2)
+        j2 = c2.get("J", 0)
+        if j2 != 0 and j2 < 5:
+            del c2["J"]
+            c2[max(c2, key=lambda k:c2[k])] += j2
+        c2 = sum([v*v for v in c2.values()])
+        card_type_scores[card2] = c2
     
     if c1 != c2:
         return c1 < c2
@@ -48,6 +55,7 @@ FILE = "days/d07/main.txt"
 cards:list[str] = []
 bids:list[int] = []
 card_value = {c:i for c, i in zip("AKQT98765432J", range(12, -1, -1))}
+card_type_scores = {}
 
 with open(FILE) as f:
     for line in f.read().splitlines():
