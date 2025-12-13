@@ -1,1 +1,1 @@
-import days.d22.sol
+import days.d23.sol2
